@@ -1,49 +1,21 @@
-import { contextBridge , ipcRenderer} from 'electron'
+import { contextBridge, ipcRenderer } from 'electron' // ❗ 增加 ipcRenderer 导入
 import { electronAPI } from '@electron-toolkit/preload'
-import type { HardwareDevice, SystemInfo, DriverInstallProgress } from '../types/hardware'
-
 
 // Custom APIs for renderer
 const api = {
-  // 获取系统信息
-  getSystemInfo: (): Promise<SystemInfo> =>
-    ipcRenderer.invoke('get-system-info'),
-
-  // 获取硬件设备列表
-  getHardwareDevices: (): Promise<HardwareDevice[]> =>
-    ipcRenderer.invoke('get-hardware-devices'),
-
-  // 检查驱动更新
-  checkDriverUpdates: (deviceId: string) =>
-    ipcRenderer.invoke('check-driver-updates', deviceId),
-
-  // 批量检查所有驱动
-  checkAllDrivers: (): Promise<void> =>
-    ipcRenderer.invoke('check-all-drivers'),
-
-  // 安装驱动
-  installDriver: (deviceId: string): Promise<boolean> =>
-    ipcRenderer.invoke('install-driver', deviceId),
-
-  // 一键安装所有必要驱动
-  installAllDrivers: (): Promise<void> =>
-    ipcRenderer.invoke('install-all-drivers'),
-
-  // 监听驱动安装进度
-  onDriverProgress: (callback: (progress: DriverInstallProgress) => void) => {
-    const subscription = (_event: any, progress: DriverInstallProgress) => callback(progress)
-    ipcRenderer.on('driver-progress', subscription)
-    return () => ipcRenderer.removeListener('driver-progress', subscription)
+  // 1. 暴露 Dialog API 给前端调用
+  dialog: {
+    // 转发文件选择请求到 Main 进程
+    showOpenDialog: (options: any) => ipcRenderer.invoke('dialog:open', options),
   },
 
-  // 监听硬件变化
-  onHardwareChange: (callback: () => void) => {
-    const subscription = () => callback()
-    ipcRenderer.on('hardware-changed', subscription)
-    return () => ipcRenderer.removeListener('hardware-changed', subscription)
-  }
+  // 2. 暴露文件系统 (FS) 操作 API
+  fs: {
+    // 转发 JSON 拆分请求到 Main 进程
+    splitJson: (filePath: string, chunkSize: number, outputPath: string) =>
+      ipcRenderer.invoke('fs:split-json', filePath, chunkSize, outputPath),
+  },
 }
-
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
@@ -51,7 +23,7 @@ const api = {
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('api', api) // 自定义 API 在这里被安全暴露
   } catch (error) {
     console.error(error)
   }

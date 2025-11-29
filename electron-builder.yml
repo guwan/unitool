@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: topdriver
+  executableName: unitool
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

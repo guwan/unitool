@@ -1,21 +1,20 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import type { HardwareDevice, SystemInfo, DriverInstallProgress, DriverInfo } from '../types/hardware'
-
-// 定义硬件 API 类型
-interface HardwareAPI {
-  getSystemInfo: () => Promise<SystemInfo>
-  getHardwareDevices: () => Promise<HardwareDevice[]>
-  checkDriverUpdates: (deviceId: string) => Promise<DriverInfo>
-  checkAllDrivers: () => Promise<void>
-  installDriver: (deviceId: string) => Promise<boolean>
-  installAllDrivers: () => Promise<void>
-  onDriverProgress: (callback: (progress: DriverInstallProgress) => void) => () => void
-  onHardwareChange: (callback: () => void) => () => void
-}
 
 declare global {
   interface Window {
     electron: ElectronAPI
-    api: HardwareAPI
+    // ❗ 更新 api 的类型定义，包含我们新增的方法
+    api: {
+      dialog: {
+        showOpenDialog: (options: any) => Promise<{ filePaths: string[] | undefined }>
+      },
+      fs: {
+        splitJson: (
+          filePath: string,
+          chunkSize: number,
+          outputPath: string
+        ) => Promise<{ fileCount: number, totalRecords: number, time: number }>
+      }
+    }
   }
 }
