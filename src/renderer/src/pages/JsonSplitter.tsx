@@ -2,24 +2,6 @@ import { useState } from 'react'
 import { FileText, Split, FolderOpen, AlertTriangle, ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom' // 引入 useNavigate
 
-// 扩展 Window 接口以包含我们暴露的 Electron API
-declare global {
-  interface Window {
-    api: {
-      dialog: {
-        showOpenDialog: (options: any) => Promise<{ filePaths: string[] | undefined }>
-      },
-      fs: {
-        splitJson: (
-          filePath: string,
-          chunkSize: number,
-          outputPath: string
-        ) => Promise<{ fileCount: number, totalRecords: number, time: number }>
-      }
-    }
-  }
-}
-
 
 const JsonSplitter = () => {
   const navigate = useNavigate() // 启用导航钩子

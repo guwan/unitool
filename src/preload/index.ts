@@ -14,6 +14,10 @@ const api = {
     // 转发 JSON 拆分请求到 Main 进程
     splitJson: (filePath: string, chunkSize: number, outputPath: string) =>
       ipcRenderer.invoke('fs:split-json', filePath, chunkSize, outputPath),
+
+    // 调用主进程的 JSON 到知识库转换操作
+    convertKnowledge: (filePath: string, outputPath: string) =>
+      ipcRenderer.invoke('fs:convert-knowledge', filePath, outputPath)
   },
 }
 

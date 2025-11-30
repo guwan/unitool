@@ -1,8 +1,9 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron' // ❗ 增加 dialog 导入
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { splitJson } from './utils/fileHandler' // ❗ 导入拆分逻辑
+import { splitJson } from './utils/fileHandler'
+import { convertJsonToMarkdown } from './utils/knowledgeConverter' // ❗ 导入新工具
 
 function createWindow(): void {
   // Create the browser window.
@@ -50,24 +51,30 @@ app.whenReady().then(() => {
 
   // --- 注册自定义 IPC 处理器 ---
 
-  // 1. 文件/目录选择对话框 (需要访问 BrowserWindow)
+  // 1. 文件/目录选择对话框 (必须保留在 index.ts 中)
   ipcMain.handle('dialog:open', async (event, options) => {
     const window = BrowserWindow.fromWebContents(event.sender)!
     return dialog.showOpenDialog(window, options)
   })
 
-  // 2. JSON 拆分操作 (委托给外部模块)
+  // 2. JSON 拆分操作 (委托给 fileHandler.ts)
   ipcMain.handle('fs:split-json', async (event, filePath: string, chunkSize: number, outputPath: string) => {
     try {
-      // 调用 utils/fileHandler.ts 中的核心函数
       return await splitJson(filePath, chunkSize, outputPath)
     } catch (error: any) {
-      // 捕获并抛出错误给前端
       throw new Error(error.message || 'JSON 拆分过程中发生未知错误。')
     }
   })
 
-  // IPC test
+  // 3. JSON 到知识库 Markdown 转换操作
+  ipcMain.handle('fs:convert-knowledge', async (event, filePath: string, outputPath: string) => {
+    try {
+      return await convertJsonToMarkdown(filePath, outputPath)
+    } catch (error: any) {
+      throw new Error(error.message || 'JSON 转换过程中发生未知错误。')
+    }
+  })
+
   ipcMain.on('ping', () => console.log('pong'))
 
   createWindow()
@@ -83,5 +90,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.

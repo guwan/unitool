@@ -1,7 +1,8 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout' // 导入 Layout
 import Home from './pages/Home' // 导入 Home
-import JsonSplitter from './pages/JsonSplitter' // 导入 JsonSplitter
+import JsonSplitter from './pages/JsonSplitter'
+import KnowledgeConverter from "@renderer/pages/KnowledgeConverter"; // 导入 JsonSplitter
 
 const App = () => {
   return (
@@ -14,6 +15,8 @@ const App = () => {
 
           {/* JSON 拆分工具路由 (对应 Next.js 的 /json-splitter 页面) */}
           <Route path="/json-splitter" element={<JsonSplitter />} />
+          {/* 知识库工具路由 */}
+          <Route path="/knowledge-converter" element={<KnowledgeConverter />} />
 
           {/* 示例：其他工具/页面 */}
           <Route path="/shutdown" element={

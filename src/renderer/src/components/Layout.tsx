@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Home as HomeIcon, Settings, Code, PackageOpen, Power } from 'lucide-react'
+import {Home as HomeIcon, Settings, Code, PackageOpen, Power, FileText} from 'lucide-react'
 
 // 定义导航项的数据结构
 interface NavItem {
@@ -15,6 +15,7 @@ const navItems: NavItem[] = [
   { path: '/json-splitter', name: 'JSON 拆分', icon: <Code size={20} /> },
   { path: '/shutdown', name: '定时关机', icon: <Power size={20} /> },
   { path: '/settings', name: '应用设置', icon: <Settings size={20} /> },
+  { path: '/knowledge-converter', name: '知识库转换', icon: <FileText size={20} /> },
 ]
 
 interface LayoutProps {
