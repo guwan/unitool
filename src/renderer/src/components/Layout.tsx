@@ -12,10 +12,10 @@ interface NavItem {
 // 导航配置
 const navItems: NavItem[] = [
   { path: '/', name: '主页概览', icon: <HomeIcon size={20} /> },
-  { path: '/json-splitter', name: 'JSON 拆分', icon: <Code size={20} /> },
+  { path: '/JsonSplitter', name: 'JSON 拆分', icon: <Code size={20} /> },
   { path: '/shutdown', name: '定时关机', icon: <Power size={20} /> },
   { path: '/settings', name: '应用设置', icon: <Settings size={20} /> },
-  { path: '/knowledge-converter', name: '知识库转换', icon: <FileText size={20} /> },
+  { path: '/KnowledgeConverter', name: '知识库转换', icon: <FileText size={20} /> },
 ]
 
 interface LayoutProps {

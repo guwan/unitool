@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import {FileJson, Power, Monitor, ArrowRight, PackageOpen, FileText} from 'lucide-react'
+import {FileJson, Power, Monitor, PackageOpen, FileText} from 'lucide-react'
 import { useNavigate } from 'react-router-dom' // 引入 useNavigate
 
 // 定义工具卡片的数据结构
@@ -47,7 +47,7 @@ const ToolCard = ({ title, desc, icon, color, onClick }: ToolCardProps) => (
 /**
  * Home 页面组件
  */
-const Home = () => {
+const Index = () => {
   const navigate = useNavigate() // 启用导航钩子
 
   // 导航逻辑：跳转到指定的 URL 路径
@@ -81,7 +81,7 @@ const Home = () => {
             desc="将 JSON 数据转换为 Dify 知识库支持的 Markdown 格式，自动拆分大文件"
             icon={<FileText size={24} />}
             color="bg-green-500"
-            onClick={() => handleToolClick('/knowledge-converter')}
+            onClick={() => handleToolClick('/KnowledgeConverter')}
           />
           <ToolCard
             // 修正名称：只保留 JSON 拆分
@@ -90,7 +90,7 @@ const Home = () => {
             icon={<FileJson size={24} />}
             color="bg-orange-500"
             // 跳转到路由 /json-splitter
-            onClick={() => handleToolClick('/json-splitter')}
+            onClick={() => handleToolClick('/JsonSplitter')}
           />
           <ToolCard
             title="定时关机助手"
@@ -112,4 +112,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Index
